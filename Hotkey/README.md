@@ -1,0 +1,1 @@
+# Demo how to implement hotkey
