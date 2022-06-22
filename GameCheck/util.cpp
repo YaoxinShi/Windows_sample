@@ -1,6 +1,7 @@
 ﻿#include "util.h"
 #include <psapi.h>
 #include <tlhelp32.h>
+#include <iostream>
 
 //======================================
 // Game related
@@ -123,7 +124,7 @@ uint32_t GetAGHGameFromEXE(std::wstring gameName)
 {
     if (gameName.find(L"RainbowSix") != std::string::npos) // RainbowSix_BE.exe
     {
-        //return (1 << AGH_GAME_TITLE_RAINBOW6); // hotkey "Alt+H" is disabled by RainbowSix game, so don't show notification.
+        return (1 << AGH_GAME_TITLE_RAINBOW6); // hotkey "Alt+H" is disabled by RainbowSix game, so don't show notification.
     }
     if (gameName.find(L"dota2.exe") != std::wstring::npos) // dota2.exe
     {
@@ -195,6 +196,8 @@ int MessageBoxTimeoutA(HWND hWnd, LPCSTR lpText,
     LPCSTR lpCaption, UINT uType, WORD wLanguageId,
     DWORD dwMilliseconds)
 {
+    std::cout << lpText << std::endl; // for debug
+
     static MSGBOXAAPI MsgBoxTOA = NULL;
 
     if (!MsgBoxTOA)
@@ -226,6 +229,8 @@ int MessageBoxTimeoutA(HWND hWnd, LPCSTR lpText,
 int MessageBoxTimeoutW(HWND hWnd, LPCWSTR lpText,
     LPCWSTR lpCaption, UINT uType, WORD wLanguageId, DWORD dwMilliseconds)
 {
+    std::wcout << lpText << std::endl; // for debug
+
     static MSGBOXWAPI MsgBoxTOW = NULL;
 
     if (!MsgBoxTOW)
