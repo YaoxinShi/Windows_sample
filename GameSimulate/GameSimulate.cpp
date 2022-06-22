@@ -51,21 +51,22 @@ int main()
 
     while (1)
     {
-        std::cout << "   1, Rainbow 6\n";
-        std::cout << "   2, Dota 2\n";
-        std::cout << "   3, League of Legends\n";
-        std::cout << "   4, Overwatch\n";
-        std::cout << "   5, CrossFire\n";
-        std::cout << "   6, PlayerUnknown's Battlegrounds\n";
+        std::cout << "THIS ONLY CHANGE WINDOW NAME. TO CHANGE PROCESS NAME, RENAME GameSimulate.exe TO [TARGET] ONE.\n";
+        std::cout << "   1, Rainbow 6 [RainbowSix_BE.exe]\n";
+        std::cout << "   2, Dota 2 [dota2.exe]\n";
+        std::cout << "   3, League of Legends [LeagueClientUx.exe]\n";
+        std::cout << "   4, Overwatch [Overwatch.exe]\n";
+        std::cout << "   5, CrossFire [crossfire.exe]\n";
+        std::cout << "   6, PlayerUnknown's Battlegrounds [TslGame.exe]\n";
         std::cout << "   7, Call of Duty\n";
-        std::cout << "   8, World of Tanks\n";
-        std::cout << "   9, Fortnite\n";
-        std::cout << "  10, CSGO\n";
+        std::cout << "   8, World of Tanks [WorldOfTanks.exe]\n";
+        std::cout << "   9, Fortnite [FortniteClient-Win64-Shipping_BE.exe]\n";
+        std::cout << "  10, CSGO [csgo.exe]\n";
         std::cout << "  11, APEX\n";
         std::cout << "  12, HOK\n";
         std::cout << "  13, ProEvolutionSoccer\n";
         std::cout << "  14, GameforPeace\n";
-        std::cout << "  15, Naraka\n";
+        std::cout << "  15, Naraka [NarakaBladepoint.exe]\n";
         std::cout << "  16, Rocket\n";
         std::cout << "  17, Valorant\n";
         std::cout << "Game ID:\n";
