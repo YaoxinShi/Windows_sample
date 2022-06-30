@@ -3,6 +3,8 @@
 
 #include <iostream>
 #include <windows.h>
+#include <string>
+#include "EasyBMP\EasyBMP.h"
 
 typedef enum AghGameTitle
 {
@@ -34,24 +36,100 @@ typedef enum AghGameLanguage
     AGH_GAME_LANGUAGE_CN = 1,           /**< Chinese */
 }AghGameLanguage;
 
+void DrwImage(std::string imagePath, HDC* console) {
+
+    BMP image;
+    image.ReadFromFile(imagePath.c_str());
+    //image.SetBitDepth(32);
+    for (int x = 0; x < image.TellWidth(); x++)
+    {
+        for (int y = 0; y < image.TellHeight(); y++)
+        {
+            int RED = image.GetPixel(x, y).Red;
+            int GREEN = image.GetPixel(x, y).Green;
+            int BLUE = image.GetPixel(x, y).Blue;
+
+            int ALPHA = image.GetPixel(x, y).Alpha;
+
+            COLORREF COLOUR = RGB(RED, GREEN, BLUE);
+            if (ALPHA == 0) {
+                SetPixel(*console, x, y, COLOUR);
+            }
+        }
+    }
+}
+
 void setup(std::wstring window_name, std::wstring process_name)
 {
+    // set window title
     HWND foreground = GetForegroundWindow();
     SetWindowText(foreground, window_name.c_str());
 
     // todo: create a process with process_name
+    std::cout << "THIS ONLY CHANGE WINDOW NAME. TO CHANGE PROCESS NAME, RENAME GameSimulate.exe TO [TARGET] ONE.\n";
+}
+
+void show(std::string bmp_name, int& bmp_index)
+{
+    // Get HWND and HDC
+    HWND console = GetDesktopWindow();
+    HDC dc = GetDC(console);
+
+    // Call DrwImage. It must be a bitmap image
+    std::string file_name = bmp_name + "_" + std::to_string(bmp_index) + ".bmp";
+    FILE* file = NULL;
+    fopen_s(&file, file_name.c_str(), "rb");
+    if (file == NULL) {
+        bmp_index = 0;
+        file_name = bmp_name + "_" + std::to_string(bmp_index) + ".bmp";
+    }
+    else
+    {
+        fclose(file);
+        file = NULL;
+    }
+
+    DrwImage(file_name.c_str(), &dc);
+
+    bmp_index++;
+
+    // Release
+    ReleaseDC(console, dc);
+}
+
+void hide()
+{
+    // do nothing
 }
 
 int main()
 {
     int game = AGH_GAME_TITLE_UNKNOWN;
     int lang = AGH_GAME_LANGUAGE_UNKNOWN;
+    char showbmp = '0';
     std::wstring window_name;
     std::wstring process_name;
+    std::string bmp_name;
 
     while (1)
     {
-        std::cout << "THIS ONLY CHANGE WINDOW NAME. TO CHANGE PROCESS NAME, RENAME GameSimulate.exe TO [TARGET] ONE.\n";
+        std::cout << "---------------------------------------------------------------------------------------------------\n";
+        std::cout << "   0, English\n";
+        std::cout << "   1, Chinese\n";
+        std::cout << "Game Language:\n";
+        std::cin >> lang;
+
+        switch (lang)
+        {
+        case 0:
+            break;
+        case 1:
+            break;
+        default:
+            std::cout << ">>>>>> invalid game language\n";
+            continue;
+        }
+
         std::cout << "   1, Rainbow 6 [RainbowSix_BE.exe]\n";
         std::cout << "   2, Dota 2 [dota2.exe]\n";
         std::cout << "   3, League of Legends [LeagueClientUx.exe]\n";
@@ -72,21 +150,19 @@ int main()
         std::cout << "Game ID:\n";
         std::cin >> game;
 
-        std::cout << "   0, English\n";
-        std::cout << "   1, Chinese\n";
-        std::cout << "Game Language (default en):\n";
-        std::cin >> lang;
-
         switch (game)
         {
         case AGH_GAME_TITLE_RAINBOW6:
             window_name = L"Rainbow Six";
+            bmp_name = "rainbow";
             break;
         case AGH_GAME_TITLE_DOTA2:
             window_name = L"Dota 2";
+            bmp_name = "dota";
             break;
         case AGH_GAME_TITLE_LOL:
             window_name = L"League of Legends (TM) Client";
+            bmp_name = "lol";
             break;
         case AGH_GAME_TITLE_OVERWATCH:
             if (lang == AGH_GAME_LANGUAGE_CN)
@@ -97,9 +173,11 @@ int main()
             {
                 window_name = L"Overwatch";
             }
+            bmp_name = "overwatch";
             break;
         case AGH_GAME_TITLE_CROSSFIRE:
             window_name = L"穿越火线";
+            bmp_name = "crossfire";
             break;
         case AGH_GAME_TITLE_PUBG:
             if (lang == AGH_GAME_LANGUAGE_CN)
@@ -110,9 +188,11 @@ int main()
             {
                 window_name = L"PLAYERUNKNOWN'S BATTLEGROUNDS";
             }
+            bmp_name = "pubg";
             break;
         case AGH_GAME_TITLE_COD:
             window_name = L"Call of Duty";
+            bmp_name = "cod";
             break;
         case AGH_GAME_TITLE_WOT:
             if (lang == AGH_GAME_LANGUAGE_CN)
@@ -123,40 +203,81 @@ int main()
             {
                 window_name = L"WoT Client";
             }
+            bmp_name = "wot";
             break;
         case AGH_GAME_TITLE_FORTNITE:
             window_name = L"Fortnite";
+            bmp_name = "fortnite";
             break;
         case AGH_GAME_TITLE_CSGO:
             window_name = L"Counter-Strike: Global Offensive";
+            bmp_name = "csgo";
             break;
         case AGH_GAME_TITLE_APEX:
             window_name = L"Apex Legends";
+            bmp_name = "apex";
             break;
         case AGH_GAME_TITLE_HOK:
             window_name = L"HOK";
+            bmp_name = "hok";
             break;
         case AGH_GAME_TITLE_PESOCCER:
             window_name = L"eFootball PES 2021 SEASON UPDATE";
+            bmp_name = "pes";
             break;
         case AGH_GAME_TITLE_GameforPeace:
             window_name = L"GOP";
+            bmp_name = "gop";
             break;
         case AGH_GAME_TITLE_Naraka:
             window_name = L"Naraka";
+            bmp_name = "naraka";
             break;
         case AGH_GAME_TITLE_Rocket:
             window_name = L"Rocket League";
+            bmp_name = "rocket";
             break;
         case AGH_GAME_TITLE_VALORANT:
             window_name = L"VALORANT";
+            bmp_name = "valorant";
             break;
         default:
-            std::cout << "invalid game ID\n";
-            window_name = L"???";
+            std::cout << ">>>>>> invalid game ID\n";
+            continue;
         }
 
         setup(window_name, process_name);
+
+        int bmp_index = 0;
+
+L_ACTION:
+        std::cout << "   n, Not show game BMP\n";
+        std::cout << "   p, Show game BMPs one by one\n";
+        std::cout << "   v, Show game BMPs automatically\n";
+        std::cout << "   r, Run next game\n";
+        std::cout << "   e, Exit app\n";
+        std::cout << "Action:\n";
+        std::cin >> showbmp;
+
+        switch (showbmp)
+        {
+        case 'n':
+            hide();
+            goto L_ACTION;
+        case 'p':
+            show(bmp_name, bmp_index);
+            goto L_ACTION;
+        case 'v':
+            show(bmp_name, bmp_index);
+            goto L_ACTION;
+        case 'r':
+            continue;
+        case 'e':
+            exit(0);
+        default:
+            std::cout << ">>>>>> invalid action\n";
+            goto L_ACTION;
+        }
     }
 }
 
