@@ -347,7 +347,7 @@ DWORD CWASAPICapture::DoCaptureThread()
             hr2 = _CaptureClient->GetBuffer(&pData, &framesAvailable, &flags, NULL, NULL);
             if (SUCCEEDED(hr2))
             {
-                //printf("GetBuffer: flags=%d\n",flags);
+                //printf("GetBuffer: framesAvailable=%d, flags=%d\n", framesAvailable, flags);
                 UINT32 framesToCopy = min(framesAvailable, static_cast<UINT32>((_CaptureBufferSize - _CurrentCaptureIndex) / _FrameSize));
                 if (framesToCopy != 0)
                 {
