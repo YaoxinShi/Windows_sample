@@ -102,6 +102,27 @@ void hide()
     // do nothing
 }
 
+bool m_running = false;
+
+void bmpWorker(LPVOID lparam) {
+    char* ige = (char*)lparam;
+
+    std::string bmp_name = ige;
+    int bmp_index = 0;
+    unsigned int clock = 0;
+
+    while (m_running)
+    {
+        if (clock % 200 == 0) // 10ms * 200 = 2s
+        {
+            show(bmp_name, bmp_index);
+        }
+        std::cout << clock << "\r"; // in order to make screen content always change
+        clock++;
+        Sleep(10); // 10ms
+    }
+}
+
 int main()
 {
     int game = AGH_GAME_TITLE_UNKNOWN;
@@ -249,11 +270,12 @@ int main()
         setup(window_name, process_name);
 
         int bmp_index = 0;
+        HANDLE m_bmpThread = NULL;
 
 L_ACTION:
         std::cout << "   n, Not show game BMP\n";
         std::cout << "   p, Show game BMPs one by one\n";
-        std::cout << "   v, Show game BMPs automatically\n";
+        std::cout << "   v, Show game BMPs automatically (0.5fps)\n";
         std::cout << "   r, Run next game\n";
         std::cout << "   e, Exit app\n";
         std::cout << "Action:\n";
@@ -268,7 +290,19 @@ L_ACTION:
             show(bmp_name, bmp_index);
             goto L_ACTION;
         case 'v':
-            show(bmp_name, bmp_index);
+            if (m_bmpThread == NULL)
+            {
+                m_running = true;
+                m_bmpThread = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)bmpWorker, (LPVOID)bmp_name.c_str(), 0, NULL);
+            }
+            else
+            {
+                m_running = false;
+                WaitForSingleObject(m_bmpThread, INFINITE);
+                CloseHandle(m_bmpThread);
+                m_bmpThread = NULL;
+            }
+
             goto L_ACTION;
         case 'r':
             continue;
