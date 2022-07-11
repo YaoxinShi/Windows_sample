@@ -151,6 +151,13 @@
     <ClInclude Include="EasyBMP\EasyBMP_BMP.h" />
     <ClInclude Include="EasyBMP\EasyBMP_DataStructures.h" />
     <ClInclude Include="EasyBMP\EasyBMP_VariousBMPutilities.h" />
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resource.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon1.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
