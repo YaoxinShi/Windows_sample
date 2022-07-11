@@ -31,9 +31,9 @@ typedef enum AghGameTitle
 
 typedef enum AghGameLanguage
 {
-    AGH_GAME_LANGUAGE_UNKNOWN = -1,          /**< Unkown */
-    AGH_GAME_LANGUAGE_EN = 0,           /**< English */
-    AGH_GAME_LANGUAGE_CN = 1,           /**< Chinese */
+    AGH_GAME_LANGUAGE_UNKNOWN = 0,      /**< Unkown */
+    AGH_GAME_LANGUAGE_EN = 1,           /**< English */
+    AGH_GAME_LANGUAGE_CN = 2,           /**< Chinese */
 }AghGameLanguage;
 
 void DrwImage(std::string imagePath, HDC* console) {
@@ -135,22 +135,26 @@ int main()
     while (1)
     {
         std::cout << "---------------------------------------------------------------------------------------------------\n";
-        std::cout << "   0, English\n";
-        std::cout << "   1, Chinese\n";
+L_GAME_LANG:
+        std::cout << "   1, English\n";
+        std::cout << "   2, Chinese\n";
         std::cout << "Game Language:\n";
         std::cin >> lang;
 
         switch (lang)
         {
-        case 0:
+        case AGH_GAME_LANGUAGE_EN:
             break;
-        case 1:
+        case AGH_GAME_LANGUAGE_CN:
             break;
         default:
             std::cout << ">>>>>> invalid game language\n";
-            continue;
+            std::cin.clear();
+            std::cin.ignore();
+            goto L_GAME_LANG;
         }
 
+L_GAME_TITLE:
         std::cout << "   1, Rainbow 6 [RainbowSix_BE.exe]\n";
         std::cout << "   2, Dota 2 [dota2.exe]\n";
         std::cout << "   3, League of Legends [LeagueClientUx.exe]\n";
@@ -264,7 +268,9 @@ int main()
             break;
         default:
             std::cout << ">>>>>> invalid game ID\n";
-            continue;
+            std::cin.clear();
+            std::cin.ignore();
+            goto L_GAME_TITLE;
         }
 
         setup(window_name, process_name);
